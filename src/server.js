@@ -1,3 +1,4 @@
+require('dotenv').config();
 const app = require('./app.js')
 const { db } = require('./database/config.js')
 console.log('Hello from Taller de motos app')
@@ -22,7 +23,7 @@ db.sync()
 
 
 //console.log("server.js started")
-const PORT = 3000
+const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
     console.log(`Server runnig at port ${PORT} 👍`)
