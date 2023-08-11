@@ -1,7 +1,7 @@
 require('dotenv').config();
 const app = require('./app.js')
 const { db } = require('./database/config.js')
-console.log('Hello from Taller de motos app')
+//console.log('Hello from Taller de motos app')
 
 //authentication 
 db.authenticate()

@@ -1,17 +1,39 @@
 const express = require('express')
 
 //controllers
-const userController = require('../controllers/user.controller') 
+const userController = require('../controllers/user.controller')
+
+//middlewares
+const validationMiddleware = require('../middlewares/validation.middleware')
+const userMiddleware = require('./../middlewares/user.middleware')
+const authMiddleware = require('./../middlewares/auth.middleware')
 
 const router = express.Router()
 
-router.route('/')
-    .get(userController.findAllUser)
-    .post(userController.createUser)
+//ruta de login
+router.post('/login',userController.login)
 
-router.route('/:id')
+router
+    .route('/')
+    .get(authMiddleware.protect, userController.findAllUser)
+    .post(validationMiddleware.CreateUserValidation, userController.createUser)
+
+router.use(authMiddleware.protect) //Protege de aquí en adelante contra usuarios no logeados
+//router.use(authMiddleware.protectAccountOwmer) //solo admite los id que coorrespondan al id del loggeado
+
+router
+    .use('/:id', userMiddleware.validUser)
+    .route('/:id')
     .get(userController.findOneUser)
     .patch(userController.updateUser)
     .delete(userController.deleteUser)
+
+    /* 
+        .use('/:id', userMiddleware.validUser)
+    .route('/:id')
+    .get(userController.findOneUser)
+    .patch(validationMiddleware.patchUserValidation,userController.updateUser)
+    .delete(userController.deleteUser)
+    */
 
 module.exports = router
