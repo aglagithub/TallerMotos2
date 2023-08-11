@@ -1,30 +1,29 @@
 require('dotenv').config();
-const app = require('./app.js')
-const { db } = require('./database/config.js')
+const app = require('./app.js');
+const { db } = require('./database/config.js');
 //console.log('Hello from Taller de motos app')
 
-//authentication 
+//authentication
 db.authenticate()
-    .then(() => {
-        console.log("Database Authenticated ...😊")
-    })
-    .catch((error) => {
-        console.log("☠️Error when authenticating to db. ")
-    })
+  .then(() => {
+    console.log('Database Authenticated ...😊');
+  })
+  .catch((error) => {
+    console.log('☠️Error when authenticating to db. ');
+  });
 
 //synchronization
 db.sync()
-    .then(() => {
-        console.log("Database Synchronized...😀")
-    })
-    .catch((error) => {
-        console.log("☠️Error sychronizing to db. ")
-    })
-
+  .then(() => {
+    console.log('Database Synchronized...😀');
+  })
+  .catch((error) => {
+    console.log('☠️Error sychronizing to db. ');
+  });
 
 //console.log("server.js started")
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-    console.log(`Server runnig at port ${PORT} 👍`)
-})
+  console.log(`Server runnig at port ${PORT} 👍`);
+});

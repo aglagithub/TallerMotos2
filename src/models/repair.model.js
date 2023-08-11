@@ -13,8 +13,8 @@ const Repair = db.define('repairs', {
     allowNull: false,
   },
   motorsNumber: {
-  type: DataTypes.INTEGER,
-  allowNull: false,
+    type: DataTypes.INTEGER,
+    allowNull: false,
   },
   description: {
     type: DataTypes.TEXT,
