@@ -12,6 +12,7 @@ exports.findAllUser = async (req, res) => {
     });
     return res.status(200).json({
       status: 'success',
+      usersNumber: users.length, 
       users,
     });
   } catch (error) {
@@ -48,6 +49,7 @@ exports.createUser = async (req, res) => {
   try {
     const { name, email, password, role = 'client' } = req.body;
     //Encriptación de contaseña
+    generateJWT
 
     const salt = await bycrypt.genSalt(12);
     const hashPassword = await bycrypt.hash(password, salt);
@@ -77,8 +79,7 @@ exports.createUser = async (req, res) => {
   }
 };
 
-//? Update user (✓)
-
+//? Update user (✓) 
 exports.updateUser = async (req, res) => {
   try {
     const { user } = req;
@@ -123,46 +124,26 @@ exports.deleteUser = async (req, res) => {
 };
 
 //? POST login
-exports.login = async (req, res) => {
+exports.login = async (req, res,next) => {
   //console.log('Hello from login')
+  const { user } = req;
 
-  try {
-    const { email, password } = req.body;
+  const { password } = req.body;
 
-    // ver si el usuario existe
-    const user = await User.findOne({
-      where: {
-        email,
-        status: 'available',
-      },
-    });
-
-    if (!user) {
-      return res.status(400).json({
-        status: 'fail',
-        message: 'Invalid credentials',
-      });
-    }
-
-    //Ver si la contraseña es correcta o no
-    if (!(await bycrypt.compare(password, user.password))) {
-      return res.status(400).json({
-        status: 'fail',
-        message: 'Invalid credentials',
-      });
-    }
-    // si la contraseña es correcta, envia token
-    const token = await generateJWT(user.id);
-
-    return res.status(200).json({
-      status: 'success',
-      token,
-      user,
-    });
-  } catch (error) {
-    return res.status(500).json({
-      status: 'fail',
-      message: 'Internal server error',
+  if (!(await bycrypt.compare(password, user.password))) {
+    return res.status(401).json({
+      status: 'error',
+      message: 'Incorrect email or password',
     });
   }
+
+  const token = await generateJWT(user.id)
+
+  return res.status(200).json({
+    status: 'success',
+    token,
+    name:user.name,
+    email:user.email,
+
+  });
 };

@@ -1,6 +1,6 @@
 const Repair = require('../models/repair.model');
 
-exports.validRepair = async (req, res, next) => {
+exports.existRepair = async (req, res, next) => {
   try {
     // la idea es validar si existe un usuario y usarlo en las rutas de usuario
     const { id } = req.params;

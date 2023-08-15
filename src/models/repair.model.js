@@ -7,17 +7,17 @@ const Repair = db.define('repairs', {
     primaryKey: true,
     autoIncrement: true,
     allowNull: false,
-  },
+  },  
   date: {
     type: DataTypes.DATE,
     allowNull: false,
   },
   motorsNumber: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.STRING,
     allowNull: false,
   },
   description: {
-    type: DataTypes.TEXT,
+    type: DataTypes.STRING,
     allowNull: false,
   },
   userId: {

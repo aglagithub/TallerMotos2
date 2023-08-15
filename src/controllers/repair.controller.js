@@ -95,7 +95,7 @@ exports.deleteRepair = async (req, res) => {
 
     return res.status(200).json({
       status: 'success',
-      message: `Repair  deleted succesfully`,
+      message: `Repair deleted succesfully`,
     });
   } catch (error) {
     console.log(error);

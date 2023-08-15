@@ -15,17 +15,20 @@ router.use(authMiddleware.protect); //Se protegen todas las rutas
 //router.use(authMiddleware.restricTo('employee'));
 router
   .route('/')
-  .get(repairController.findAllRepairs)
+  .get(authMiddleware.restrictTo('employee'),repairController.findAllRepairs)
   .post(
     validationMiddleware.createRepairValidation,
     repairController.createRepair
   );
 
 router
-  .use('/:id', repairMiddleware.validRepair)
+  .use('/:id', repairMiddleware.existRepair)
+  .use(authMiddleware.restrictTo('employee'))
   .route('/:id')
   .get(repairController.findOneRepair)
   .patch(repairController.updateRepair)
   .delete(repairController.deleteRepair);
 
 module.exports = router;
+
+//falta validador an patch

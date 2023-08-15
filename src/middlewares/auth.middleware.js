@@ -17,7 +17,7 @@ exports.protect = async (req, res, next) => {
       return res.status(401).json({
         status: 'error',
         message: 'You are not logged in! Please log in to get access',
-      });
+      }); 
     }
 
     //console.log('token almacenado:', token)
@@ -27,7 +27,7 @@ exports.protect = async (req, res, next) => {
       token,
       process.env.SECRET_JWT_SEED
     );
-    console.log('decoded:', decoded);
+    //console.log('decoded:', decoded);
 
     const user = await User.findOne({
       where: {
@@ -52,6 +52,20 @@ exports.protect = async (req, res, next) => {
     });
   }
 };
+
+//verificación de rol.
+exports.restrictTo = (...roles) => {
+  return (req, res, next) => {
+    if (!roles.includes(req.sessionUser.role)) {
+      return next(
+        new AppError('You do not have permission to perfom this action.!', 403)
+      );
+    }
+
+    next();
+  };
+};
+
 
 //Proteccion de la cuenta de usuario (pend implentation)
 exports.protectAccountOwmer = (req, res, next) => {
@@ -78,28 +92,3 @@ exports.protectAccountOwmer = (req, res, next) => {
   next();
 };
 
-//verificación de rol. (pend implentation)
-exports.restricTo = (...roles) => {
-  return (req, res, next) => {
-    //console.log(roles);
-
-    try {
-      if (!roles.includes(req.sessionUser.role)) {
-        return res.status(403).json({
-          status: 'fail',
-          message: 'You do not own this account.',
-          error,
-        });
-      }
-    } catch (error) {
-      console.log(error);
-      return res.status(500).json({
-        status: 'fail',
-        message: 'Somethig went very wrong!',
-        error,
-      });
-    }
-
-    next();
-  };
-};
