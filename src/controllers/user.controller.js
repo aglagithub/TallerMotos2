@@ -84,6 +84,14 @@ exports.updateUser = async (req, res) => {
   try {
     const { user } = req;
     const { name, email } = req.body;
+    //console.log('user.id en update user:',user.id)
+    //console.log('sessionUser en update user:', req.sessionUser.id)
+    if (user.id !== req.sessionUser.id){
+      return res.status(400).json({
+        status: 'fail',
+        message: 'You are trying to update another user',
+      });
+    }
 
     await user.update({ name, email });
 
@@ -106,6 +114,14 @@ exports.updateUser = async (req, res) => {
 exports.deleteUser = async (req, res) => {
   try {
     const { user } = req;
+    
+    if (user.id !== req.sessionUser.id) {
+      return res.status(400).json({
+        status: 'fail',
+        message: 'You are trying to delete another user',
+      });
+    }
+
 
     await user.update({ status: 'disabled' });
 

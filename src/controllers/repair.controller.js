@@ -8,6 +8,12 @@ exports.findAllRepairs = async (req, res) => {
       where: {
         status: ['pending'],
       },
+      include: [
+        {
+          model: User,
+          attributes:['name', 'email']
+        },
+      ],
     });
     return res.status(200).json({
       status: 'success',
@@ -28,6 +34,7 @@ exports.findAllRepairs = async (req, res) => {
 exports.findOneRepair = async (req, res) => {
   try {
     const { repair } = req;
+  
 
     return res.status(200).json({
       status: 'success',

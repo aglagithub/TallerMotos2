@@ -59,10 +59,10 @@ exports.protect = async (req, res, next) => {
 
 //verificación de rol.
 exports.restrictTo = (...roles) => {
-  console.log("roles:");
+  
   return (req, res, next) => {
-    console.log("roles:",roles);
-    console.log("req.sessionUser.role:",req.sessionUser.role);
+    //console.log("roles:",roles);
+    //console.log("req.sessionUser.role:",req.sessionUser.role);
     if (!roles.includes(req.sessionUser.role)) {
       return next(
         new AppError(`You do not have permission to perfom this action.! Yor role is ${req.sessionUser.role}`, 403)
