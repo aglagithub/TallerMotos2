@@ -1,3 +1,5 @@
+const AppError = require('../utils/appError');
+const catchAsync = require('../utils/catchAsync');
 const { promisify } = require('util');
 const jwt = require('jsonwebtoken');
 
@@ -27,6 +29,8 @@ exports.protect = async (req, res, next) => {
       token,
       process.env.SECRET_JWT_SEED
     );
+
+
     //console.log('decoded:', decoded);
 
     const user = await User.findOne({
@@ -55,10 +59,13 @@ exports.protect = async (req, res, next) => {
 
 //verificación de rol.
 exports.restrictTo = (...roles) => {
+  console.log("roles:");
   return (req, res, next) => {
+    console.log("roles:",roles);
+    console.log("req.sessionUser.role:",req.sessionUser.role);
     if (!roles.includes(req.sessionUser.role)) {
       return next(
-        new AppError('You do not have permission to perfom this action.!', 403)
+        new AppError(`You do not have permission to perfom this action.! Yor role is ${req.sessionUser.role}`, 403)
       );
     }
 
